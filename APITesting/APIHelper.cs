@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using APIDemo.DTO;
+using APITesting;
+using Newtonsoft.Json;
 using RestSharp;
+using System.Drawing;
 using System.IO;
 
 
@@ -56,5 +59,22 @@ namespace APIDemo
             DTO dtoObject = JsonConvert.DeserializeObject<DTO>(content);
             return dtoObject;
         }
+        public string Serialize(dynamic content)
+        {
+            string serializeObject = JsonConvert.SerializeObject(content, Formatting.Indented);
+            return serializeObject;
+        }
+        public RestResponse createUser(string endpoint, dynamic payload)
+        {
+            var api = new APIHelper<CreateUserDTO>();
+            var url = api.SetUrl("api/users");
+
+            var requestJson = HandleContent.serialize(payload);
+            var request = api.CreatePostRequest(requestJson);
+            var response = api.GetResponse(url, request);
+            return response;
+        }
+
+
     }
 }
